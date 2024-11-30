@@ -14,6 +14,6 @@ message: '您需要安装服务器材质包才能进入服务器!'
 # Material package download link
 url: "https://www.google.com/minecraft.zip"
 
-# 材质包 SHA-1 值
-# Material package SHA-1 value
-sha1: "your-file-sha-1"
+# 材质包 SHA-1 值, 懒得算可留空，程序将自动生成一个随机的 SHA-1 （但会浪费下载服务器带宽）
+# Resource pack SHA-1 value, leave it blank and the program will generate a random SHA-1 (but it will waste download server bandwidth)
+sha1: ""

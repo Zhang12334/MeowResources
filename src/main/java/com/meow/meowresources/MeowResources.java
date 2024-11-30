@@ -70,7 +70,7 @@ public class MeowResources extends JavaPlugin implements Listener {
         String language = config.getString("language", "zh_cn");
         kickMessage = config.getString("message", "您需要安装服务器材质包才能进入服务器!");
         file_url = config.getString("url", "https://www.google.com/minecraft.zip");
-        file_sha1 = config.getString("sha1", "7e9827d1d4ad4cb61dea084a4d4a8f8663762ef3");
+        file_sha1 = config.getString("sha1", "e788ad9d71905d43565e0028e08a568f5d253e4e");
         if ("zh_cn".equalsIgnoreCase(language)) {
             // 中文消息
             startupMessage = "MeowResources 已加载！";
