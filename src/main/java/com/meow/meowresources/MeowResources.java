@@ -1,20 +1,22 @@
 package com.meow.meowresources;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent.Status;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.ArrayList;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 
 public class MeowResources extends JavaPlugin implements Listener {
@@ -34,6 +36,9 @@ public class MeowResources extends JavaPlugin implements Listener {
     private String declinedMessage;
     private String faileddownloadMessage;
     private String kickMessage;
+    private String file_url;
+    private String file_sha1;
+    private String failedsendMessage;
     @Override
     public void onEnable() {
         //bstats
@@ -64,7 +69,8 @@ public class MeowResources extends JavaPlugin implements Listener {
         FileConfiguration config = getConfig();
         String language = config.getString("language", "zh_cn");
         kickMessage = config.getString("message", "您需要安装服务器材质包才能进入服务器!");
-
+        file_url = config.getString("url", "https://www.google.com/minecraft.zip");
+        file_sha1 = config.getString("sha1", "7e9827d1d4ad4cb61dea084a4d4a8f8663762ef3");
         if ("zh_cn".equalsIgnoreCase(language)) {
             // 中文消息
             startupMessage = "MeowResources 已加载！";
@@ -79,7 +85,8 @@ public class MeowResources extends JavaPlugin implements Listener {
             reloadedMessage = "配置文件已重载！";
             nopermissionMessage = "你没有权限执行此命令！";
             declinedMessage = "被踢出服务器, 原因: 玩家拒绝加载材质包";
-            faileddownloadMessage = "被踢出服务器, 原因: 玩家下载资源包失败";
+            faileddownloadMessage = "被踢出服务器, 原因: 玩家下载材质包失败";
+            failedsendMessage = "为玩家发送材质包失败";
         } else if("zh_tc".equalsIgnoreCase(language)) {
             // 繁体中文消息
             startupMessage = "MeowResources 已載入！";
@@ -95,6 +102,7 @@ public class MeowResources extends JavaPlugin implements Listener {
             nopermissionMessage = "你沒有權限執行此命令！";
             declinedMessage = "被踢出伺服器，原因: 玩家拒絕加載材質包";
             faileddownloadMessage = "被踢出伺服器，原因: 玩家下載材質包失敗";
+            failedsendMessage = "為玩家發送材質包失敗";
         } else if("en".equalsIgnoreCase(language)) {
             // English message
             startupMessage = "MeowResources has been loaded!";
@@ -110,6 +118,7 @@ public class MeowResources extends JavaPlugin implements Listener {
             nopermissionMessage = "You do not have permission to execute this command!";
             declinedMessage = "Kicked from the server, reason: Player declined to load the resource pack";
             faileddownloadMessage = "Kicked from the server, reason: Player failed to download the resource pack";
+            failedsendMessage = "Failed to send resource pack to player";
         } else {
             getLogger().warning("Invalid language setting, using default language: zh_cn");
         }
@@ -125,6 +134,12 @@ public class MeowResources extends JavaPlugin implements Listener {
     }
 
     @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        sendResourcePack(player, file_url, file_sha1);
+    }
+
+    @EventHandler
     public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         // 获取玩家和资源包加载状态
         if (event.getStatus() == Status.DECLINED) {
@@ -135,6 +150,15 @@ public class MeowResources extends JavaPlugin implements Listener {
             // 资源包下载失败
             event.getPlayer().kickPlayer(kickMessage);
             getLogger().info(event.getPlayer().getName() + faileddownloadMessage);
+        }
+    }
+
+    public void sendResourcePack(Player player, String url, String sha1) {
+        try {
+            player.setResourcePack(url, sha1.isEmpty() ? null : java.util.Base64.getDecoder().decode(sha1));
+        } catch (Exception e) {
+            getLogger().warning(failedsendMessage);
+            e.printStackTrace();
         }
     }
 

@@ -9,3 +9,11 @@ language: zh_cn
 # 未加载材质包的玩家被踢出时的提示信息
 # Message when a player is kicked out because of not loading the material package
 message: '您需要安装服务器材质包才能进入服务器!'
+
+# 材质包下载链接
+# Material package download link
+url: "https://www.google.com/minecraft.zip"
+
+# 材质包 SHA-1 值
+# Material package SHA-1 value
+sha1: "your-file-sha-1"
