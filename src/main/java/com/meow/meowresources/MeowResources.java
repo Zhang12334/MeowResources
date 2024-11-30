@@ -138,23 +138,23 @@ public class MeowResources extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         // 获取玩家和资源包加载状态
-        if (event.getStatus() == Status.DECLINED) {
+        if (event.getStatus() == DECLINED) {
             // 拒绝加载
             event.getPlayer().sendMessage(kickMessage);
             getLogger().info(event.getPlayer().getName() + declinedMessage);
-        } else if (event.getStatus() == Status.DISCARDED) {
+        } else if (event.getStatus() == DISCARDED) {
             // 被丢弃
             event.getPlayer().kickPlayer(kickMessage);
             getLogger().info(event.getPlayer().getName() + discardedMessage);
-        } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
+        } else if (event.getStatus() == FAILED_DOWNLOAD) {
             // 资源包下载失败
             event.getPlayer().kickPlayer(kickMessage);
             getLogger().info(event.getPlayer().getName() + faileddownloadMessage);
-        } else if (event.getStatus() == Status.FAILED_RELOAD) {
+        } else if (event.getStatus() == FAILED_RELOAD) {
             // 资源包重载失败
             event.getPlayer().kickPlayer(kickMessage);
             getLogger().info(event.getPlayer().getName() + failedreloadMessage);
-        } else if (event.getStatus() == Status.INVALID_URL) {
+        } else if (event.getStatus() == INVALID_URL) {
             // 资源包链接不合法
             event.getPlayer().kickPlayer(kickMessage);
             getLogger().info(event.getPlayer().getName() + invalidurlMessage);
