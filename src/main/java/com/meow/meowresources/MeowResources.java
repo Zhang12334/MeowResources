@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent.Status;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,7 +18,6 @@ import java.io.File;
 
 public class MeowResources extends JavaPlugin implements Listener {
 
-    private ConfigHandler configHandler;
     // 一堆存储消息的变量
     private String startupMessage;
     private String shutdownMessage;
@@ -256,7 +255,6 @@ public class MeowResources extends JavaPlugin implements Listener {
                 if (sender.hasPermission("MeowResources.reload")) {
                     reloadConfig();
                     loadLanguage(); // 加载语言配置
-                    configHandler.reloadConfig();  // 热加载配置
                     sender.sendMessage(ChatColor.GREEN + reloadedMessage);
                     getLogger().info(reloadedMessage);
                 } else {
