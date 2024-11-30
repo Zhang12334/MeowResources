@@ -1,0 +1,17 @@
+name: MeowResources
+version: 1.0
+main: com.meow.meowresources.MeowResources
+api-version: 1.16
+softdepend: ["ItemsAdder"]
+commands:
+  meowresources:
+    description: 主插件命令
+    usage: /<command> <subcommand>
+    subcommands:
+      reload:
+        description: 重新加载插件配置
+        usage: /meowresources reload
+permissions:
+  meowresources.reload:
+    description: 允许重载配置文件
+    default: op
