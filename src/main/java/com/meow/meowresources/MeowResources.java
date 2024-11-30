@@ -31,10 +31,7 @@ public class MeowResources extends JavaPlugin implements Listener {
     private String reloadedMessage;
     private String nopermissionMessage;
     private String declinedMessage;
-    private String discardedMessage;
     private String faileddownloadMessage;
-    private String failedreloadMessage;
-    private String invalidurlMessage;
     private String kickMessage;
     @Override
     public void onEnable() {
@@ -81,10 +78,7 @@ public class MeowResources extends JavaPlugin implements Listener {
             reloadedMessage = "配置文件已重载！";
             nopermissionMessage = "你没有权限执行此命令！";
             declinedMessage = "被踢出服务器, 原因: 玩家拒绝加载材质包";
-            discardedMessage = "被踢出服务器, 原因: 资源包被玩家客户端丢弃";
             faileddownloadMessage = "被踢出服务器, 原因: 玩家下载资源包失败";
-            failedreloadMessage = "被踢出服务器, 原因: 玩家资源包重载失败";
-            invalidurlMessage = "被踢出服务器, 原因: 资源包下载地址无效";
         } else if("zh_tc".equalsIgnoreCase(language)) {
             // 繁体中文消息
             startupMessage = "MeowResources 已載入！";
@@ -99,10 +93,7 @@ public class MeowResources extends JavaPlugin implements Listener {
             reloadedMessage = "配置文件已重載！";
             nopermissionMessage = "你沒有權限執行此命令！";
             declinedMessage = "被踢出伺服器，原因: 玩家拒絕加載材質包";
-            discardedMessage = "被踢出伺服器，原因: 材質包被玩家客戶端丟棄";
             faileddownloadMessage = "被踢出伺服器，原因: 玩家下載材質包失敗";
-            failedreloadMessage = "被踢出伺服器，原因: 玩家材質包重載失敗";
-            invalidurlMessage = "被踢出伺服器，原因: 材質包下載地址無效";
         } else if("en".equalsIgnoreCase(language)) {
             // English message
             startupMessage = "MeowResources has been loaded!";
@@ -117,10 +108,7 @@ public class MeowResources extends JavaPlugin implements Listener {
             reloadedMessage = "Configuration file has been reloaded!";
             nopermissionMessage = "You do not have permission to execute this command!";
             declinedMessage = "Kicked from the server, reason: Player declined to load the resource pack";
-            discardedMessage = "Kicked from the server, reason: Resource pack was discarded by the player's client";
             faileddownloadMessage = "Kicked from the server, reason: Player failed to download the resource pack";
-            failedreloadMessage = "Kicked from the server, reason: Player failed to reload the resource pack";
-            invalidurlMessage = "Kicked from the server, reason: Invalid resource pack download URL";
         } else {
             getLogger().warning("Invalid language setting, using default language: zh_cn");
         }
@@ -142,22 +130,10 @@ public class MeowResources extends JavaPlugin implements Listener {
             // 拒绝加载
             event.getPlayer().sendMessage(kickMessage);
             getLogger().info(event.getPlayer().getName() + declinedMessage);
-        } else if (event.getStatus() == DISCARDED) {
-            // 被丢弃
-            event.getPlayer().kickPlayer(kickMessage);
-            getLogger().info(event.getPlayer().getName() + discardedMessage);
         } else if (event.getStatus() == FAILED_DOWNLOAD) {
             // 资源包下载失败
             event.getPlayer().kickPlayer(kickMessage);
             getLogger().info(event.getPlayer().getName() + faileddownloadMessage);
-        } else if (event.getStatus() == FAILED_RELOAD) {
-            // 资源包重载失败
-            event.getPlayer().kickPlayer(kickMessage);
-            getLogger().info(event.getPlayer().getName() + failedreloadMessage);
-        } else if (event.getStatus() == INVALID_URL) {
-            // 资源包链接不合法
-            event.getPlayer().kickPlayer(kickMessage);
-            getLogger().info(event.getPlayer().getName() + invalidurlMessage);
         }
     }
 
