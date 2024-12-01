@@ -39,6 +39,7 @@ public class MeowResources extends JavaPlugin implements Listener {
     private String file_url;
     private String file_sha1;
     private String failedsendMessage;
+    private boolean enable_send;
     @Override
     public void onEnable() {
         //bstats
@@ -71,6 +72,7 @@ public class MeowResources extends JavaPlugin implements Listener {
         kickMessage = config.getString("message", "您需要安装服务器材质包才能进入服务器!");
         file_url = config.getString("url", "https://www.google.com/minecraft.zip");
         file_sha1 = config.getString("sha1", "e788ad9d71905d43565e0028e08a568f5d253e4e");
+        enable_send = config.getBoolean("enable_send_resourcepack", false);
         if ("zh_cn".equalsIgnoreCase(language)) {
             // 中文消息
             startupMessage = "MeowResources 已加载！";
@@ -135,8 +137,10 @@ public class MeowResources extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        sendResourcePack(player, file_url, file_sha1);
+        if (enable_send) {
+            Player player = event.getPlayer();
+            sendResourcePack(player, file_url, file_sha1);
+        }
     }
 
     @EventHandler
