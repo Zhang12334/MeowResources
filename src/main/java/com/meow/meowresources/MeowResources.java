@@ -86,9 +86,11 @@ public class MeowResources extends JavaPlugin implements Listener {
             nowusinglatestversionMessage = "您正在使用最新版本！";
             reloadedMessage = "配置文件已重载！";
             nopermissionMessage = "你没有权限执行此命令！";
-            declinedMessage = "拒绝加载材质包, 正在尝试重新加载";
-            faileddownloadMessage = "下载材质包失败, 正在尝试重新加载";
+            declinedMessage = "拒绝加载材质包";
+            faileddownloadMessage = "下载材质包失败";
             failedsendMessage = "为玩家发送材质包失败";
+            tryingtoreloadMessage = ", 正在尝试重新加载...";
+            kickedMessage = ", 已被踢出服务器";
         } else if("zh_tc".equalsIgnoreCase(language)) {
             // 繁体中文消息
             startupMessage = "MeowResources 已載入！";
@@ -102,9 +104,11 @@ public class MeowResources extends JavaPlugin implements Listener {
             nowusinglatestversionMessage = "您正在使用最新版本！";
             reloadedMessage = "配置文件已重載！";
             nopermissionMessage = "你沒有權限執行此命令！";
-            declinedMessage = "拒絕加載材質包, 嘗試重新加載中";
-            faileddownloadMessage = "下載材質包失敗, 嘗試重新加載中";
+            declinedMessage = "拒絕加載材質包";
+            faileddownloadMessage = "下載材質包失敗";
             failedsendMessage = "為玩家發送材質包失敗";
+            tryingtoreloadMessage = ", 正在嘗試重新載入...";
+            kickedMessage = ", 已被踢出伺服器";
         } else if("en".equalsIgnoreCase(language)) {
             // English message
             startupMessage = "MeowResources has been loaded!";
@@ -118,9 +122,11 @@ public class MeowResources extends JavaPlugin implements Listener {
             nowusinglatestversionMessage = "You are using the latest version!";
             reloadedMessage = "Configuration file has been reloaded!";
             nopermissionMessage = "You do not have permission to execute this command!";
-            declinedMessage = "Declined to load resource pack, trying to reload...";
-            faileddownloadMessage = "Failed to download resource pack, trying to reload...";
+            declinedMessage = "Declined to load resource pack";
+            faileddownloadMessage = "Failed to download resource pack";
             failedsendMessage = "Failed to send resource pack to player";
+            tryingtoreloadMessage = ", trying to reload...";
+            kickedMessage = ", kicked from the server";
         } else {
             getLogger().warning("Invalid language setting, using default language: zh_cn");
         }
@@ -151,13 +157,24 @@ public class MeowResources extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         Player player = event.getPlayer();
-        
-        if (event.getStatus() == Status.DECLINED) {
-            getLogger().info(player.getName() + " " + declinedMessage);
-            sendResourcePack(player, file_url, file_sha1);
-        } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
-            getLogger().info(player.getName() + " " + faileddownloadMessage);
-            sendResourcePack(player, file_url, file_sha1);
+        if (enable_send == true) {
+            // 启用了发送材质包，重新发送
+            if (event.getStatus() == Status.DECLINED) {
+                getLogger().info(player.getName() + " " + declinedMessage + tryingtoreloadMessage);
+                sendResourcePack(player, file_url, file_sha1);
+            } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
+                getLogger().info(player.getName() + " " + faileddownloadMessage + tryingtoreloadMessage);
+                sendResourcePack(player, file_url, file_sha1);
+            }
+        } else {
+            // 没启用，踢出
+            if (event.getStatus() == Status.DECLINED) {
+                getLogger().info(player.getName() + " " + declinedMessage + kickedMessage);
+                event.getPlayer().kickPlayer(kickMessage);
+            } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
+                getLogger().info(player.getName() + " " + faileddownloadMessage + kickedMessage);
+                event.getPlayer().kickPlayer(kickMessage);
+            }
         }
     }
     
