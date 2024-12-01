@@ -164,9 +164,22 @@ public class MeowResources extends JavaPlugin implements Listener {
             if (event.getStatus() == Status.DECLINED) {
                 getLogger().info(player.getName() + " " + declinedMessage + tryingtoreloadMessage);
                 sendResourcePack(player, file_url, file_sha1);
+                // 延迟5tick重新发送
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sendResourcePack(player, file_url, file_sha1);
+                    }
+                }.runTaskLater(this, 5);                
             } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
                 getLogger().info(player.getName() + " " + faileddownloadMessage + tryingtoreloadMessage);
-                sendResourcePack(player, file_url, file_sha1);
+                // 延迟5tick重新发送
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        sendResourcePack(player, file_url, file_sha1);
+                    }
+                }.runTaskLater(this, 5);
             }
         } else {
             // 没启用，踢出
