@@ -40,6 +40,8 @@ public class MeowResources extends JavaPlugin implements Listener {
     private String file_sha1;
     private String failedsendMessage;
     private boolean enable_send;
+    private String tryingtoreloadMessage;
+    private String kickedMessage;
     @Override
     public void onEnable() {
         //bstats
