@@ -140,8 +140,11 @@ public class MeowResources extends JavaPlugin implements Listener {
         if (enable_send) {
             Player player = event.getPlayer();
             new BukkitRunnable() {
-                sendResourcePack(player, file_url, file_sha1);
-            }.runTaskLater(this, 5);
+                @Override
+                public void run() {
+                    sendResourcePack(player, file_url, file_sha1);
+                }
+            }.runTaskLater(this, 10);
         }
     }
 
