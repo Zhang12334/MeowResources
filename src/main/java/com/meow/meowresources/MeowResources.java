@@ -152,7 +152,7 @@ public class MeowResources extends JavaPlugin implements Listener {
                 public void run() {
                     sendResourcePack(player, file_url, file_sha1);
                 }
-            }.runTaskLater(this, 5);
+            }.runTaskLater(this, 15);
         }
     }
 
