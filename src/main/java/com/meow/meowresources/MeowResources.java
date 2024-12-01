@@ -86,8 +86,8 @@ public class MeowResources extends JavaPlugin implements Listener {
             nowusinglatestversionMessage = "您正在使用最新版本！";
             reloadedMessage = "配置文件已重载！";
             nopermissionMessage = "你没有权限执行此命令！";
-            declinedMessage = "被踢出服务器, 原因: 玩家拒绝加载材质包";
-            faileddownloadMessage = "被踢出服务器, 原因: 玩家下载材质包失败";
+            declinedMessage = "拒绝加载材质包, 正在尝试重新加载";
+            faileddownloadMessage = "下载材质包失败, 正在尝试重新加载";
             failedsendMessage = "为玩家发送材质包失败";
         } else if("zh_tc".equalsIgnoreCase(language)) {
             // 繁体中文消息
@@ -102,8 +102,8 @@ public class MeowResources extends JavaPlugin implements Listener {
             nowusinglatestversionMessage = "您正在使用最新版本！";
             reloadedMessage = "配置文件已重載！";
             nopermissionMessage = "你沒有權限執行此命令！";
-            declinedMessage = "被踢出伺服器，原因: 玩家拒絕加載材質包";
-            faileddownloadMessage = "被踢出伺服器，原因: 玩家下載材質包失敗";
+            declinedMessage = "拒絕加載材質包, 嘗試重新加載中";
+            faileddownloadMessage = "下載材質包失敗, 嘗試重新加載中";
             failedsendMessage = "為玩家發送材質包失敗";
         } else if("en".equalsIgnoreCase(language)) {
             // English message
@@ -118,8 +118,8 @@ public class MeowResources extends JavaPlugin implements Listener {
             nowusinglatestversionMessage = "You are using the latest version!";
             reloadedMessage = "Configuration file has been reloaded!";
             nopermissionMessage = "You do not have permission to execute this command!";
-            declinedMessage = "Kicked from the server, reason: Player declined to load the resource pack";
-            faileddownloadMessage = "Kicked from the server, reason: Player failed to download the resource pack";
+            declinedMessage = "Declined to load resource pack, trying to reload...";
+            faileddownloadMessage = "Failed to download resource pack, trying to reload...";
             failedsendMessage = "Failed to send resource pack to player";
         } else {
             getLogger().warning("Invalid language setting, using default language: zh_cn");
@@ -145,18 +145,17 @@ public class MeowResources extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
-        // 获取玩家和资源包加载状态
+        Player player = event.getPlayer();
+        
         if (event.getStatus() == Status.DECLINED) {
-            // 拒绝加载
-            event.getPlayer().kickPlayer(kickMessage);
-            getLogger().info(event.getPlayer().getName() + declinedMessage);
+            getLogger().info(player.getName() + " " + declinedMessage);
+            sendResourcePack(player, file_url, file_sha1); // Force resend resource pack
         } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
-            // 资源包下载失败
-            event.getPlayer().kickPlayer(kickMessage);
-            getLogger().info(event.getPlayer().getName() + faileddownloadMessage);
+            getLogger().info(player.getName() + " " + faileddownloadMessage);
+            sendResourcePack(player, file_url, file_sha1); // Force resend resource pack
         }
     }
-
+    
     public void sendResourcePack(Player player, String url, String sha1) {
         try {
             player.setResourcePack(url, sha1.isEmpty() ? null : java.util.Base64.getDecoder().decode(sha1));
