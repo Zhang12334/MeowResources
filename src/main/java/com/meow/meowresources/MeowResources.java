@@ -139,7 +139,9 @@ public class MeowResources extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (enable_send) {
             Player player = event.getPlayer();
-            sendResourcePack(player, file_url, file_sha1);
+            new BukkitRunnable() {
+                sendResourcePack(player, file_url, file_sha1);
+            }.runTaskLater(this, 5);
         }
     }
 
@@ -149,10 +151,10 @@ public class MeowResources extends JavaPlugin implements Listener {
         
         if (event.getStatus() == Status.DECLINED) {
             getLogger().info(player.getName() + " " + declinedMessage);
-            sendResourcePack(player, file_url, file_sha1); // Force resend resource pack
+            sendResourcePack(player, file_url, file_sha1);
         } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
             getLogger().info(player.getName() + " " + faileddownloadMessage);
-            sendResourcePack(player, file_url, file_sha1); // Force resend resource pack
+            sendResourcePack(player, file_url, file_sha1);
         }
     }
     
