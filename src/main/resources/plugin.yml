@@ -6,7 +6,7 @@ softdepend: ["ItemsAdder"]
 commands:
   meowresources:
     description: 主插件命令
-    usage: /<command> <subcommand>
+    usage: /meowresources reload
     subcommands:
       reload:
         description: 重新加载插件配置
