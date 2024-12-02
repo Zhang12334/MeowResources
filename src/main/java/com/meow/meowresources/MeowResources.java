@@ -43,6 +43,7 @@ public class MeowResources extends JavaPlugin implements Listener {
     private String tryingtoreloadMessage;
     private String kickedMessage;
     private int tickdelay;
+    private boolean enable_resend;
     @Override
     public void onEnable() {
         //bstats
@@ -77,6 +78,7 @@ public class MeowResources extends JavaPlugin implements Listener {
         file_sha1 = config.getString("sha1", "e788ad9d71905d43565e0028e08a568f5d253e4e");
         enable_send = config.getBoolean("enable_send_resourcepack", false);
         tickdelay = config.getInt("tick_delay", 20);
+        enable_resend = config.getBoolean("enable_resend_resourcepack", false);
         if ("zh_cn".equalsIgnoreCase(language)) {
             // 中文消息
             startupMessage = "MeowResources 已加载！";
@@ -161,7 +163,7 @@ public class MeowResources extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerResourcePackStatus(PlayerResourcePackStatusEvent event) {
         Player player = event.getPlayer();
-        if (enable_send == true) {
+        if (enable_send == true && enable_resend == true) {
             // 启用了发送材质包，重新发送
             if (event.getStatus() == Status.DECLINED) {
                 getLogger().info(player.getName() + " " + declinedMessage + tryingtoreloadMessage);
