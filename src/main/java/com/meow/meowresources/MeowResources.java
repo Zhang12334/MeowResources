@@ -42,6 +42,7 @@ public class MeowResources extends JavaPlugin implements Listener {
     private boolean enable_send;
     private String tryingtoreloadMessage;
     private String kickedMessage;
+    private int tickdelay;
     @Override
     public void onEnable() {
         //bstats
@@ -75,6 +76,7 @@ public class MeowResources extends JavaPlugin implements Listener {
         file_url = config.getString("url", "https://www.google.com/minecraft.zip");
         file_sha1 = config.getString("sha1", "e788ad9d71905d43565e0028e08a568f5d253e4e");
         enable_send = config.getBoolean("enable_send_resourcepack", false);
+        tickdelay = config.getInt("tick_delay", 20);
         if ("zh_cn".equalsIgnoreCase(language)) {
             // 中文消息
             startupMessage = "MeowResources 已加载！";
@@ -152,7 +154,7 @@ public class MeowResources extends JavaPlugin implements Listener {
                 public void run() {
                     sendResourcePack(player, file_url, file_sha1);
                 }
-            }.runTaskLater(this, 15);
+            }.runTaskLater(this, tickdelay);
         }
     }
 
@@ -164,22 +166,22 @@ public class MeowResources extends JavaPlugin implements Listener {
             if (event.getStatus() == Status.DECLINED) {
                 getLogger().info(player.getName() + " " + declinedMessage + tryingtoreloadMessage);
                 sendResourcePack(player, file_url, file_sha1);
-                // 延迟5tick重新发送
+                // 延迟10tick重新发送
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         sendResourcePack(player, file_url, file_sha1);
                     }
-                }.runTaskLater(this, 5);                
+                }.runTaskLater(this, 10);                
             } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
                 getLogger().info(player.getName() + " " + faileddownloadMessage + tryingtoreloadMessage);
-                // 延迟5tick重新发送
+                // 延迟tick重新发送
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         sendResourcePack(player, file_url, file_sha1);
                     }
-                }.runTaskLater(this, 5);
+                }.runTaskLater(this, 10);
             }
         } else {
             // 没启用，踢出

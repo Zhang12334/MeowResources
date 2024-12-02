@@ -1,6 +1,6 @@
 # 配置文件版本
 # Config file version
-config_version: 1.1
+config_version: 1.2
 
 # 语言
 # Language
@@ -21,3 +21,7 @@ url: "https://www.google.com/minecraft.zip"
 # 材质包 SHA-1 值, 懒得算可留空，程序将自动生成一个随机的 SHA-1 （但会浪费下载服务器带宽）
 # Resource pack SHA-1 value, leave it blank and the program will generate a random SHA-1 (but it will waste download server bandwidth)
 sha1: ""
+
+# 在玩家进服后，发送材质包前延迟多长时间（以tick为单位，正常TPS为20时一秒20tick）
+# Delay how long before sending the resourcepack after the player joins (in tick, 20 tick = 1 second)
+tick_delay: 20
