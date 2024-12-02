@@ -172,7 +172,7 @@ public class MeowResources extends JavaPlugin implements Listener {
                     public void run() {
                         sendResourcePack(player, file_url, file_sha1);
                     }
-                }.runTaskLater(this, 10);                
+                }.runTaskLater(this, tickdelay);                
             } else if (event.getStatus() == Status.FAILED_DOWNLOAD) {
                 getLogger().info(player.getName() + " " + faileddownloadMessage + tryingtoreloadMessage);
                 // 延迟tick重新发送
@@ -181,7 +181,7 @@ public class MeowResources extends JavaPlugin implements Listener {
                     public void run() {
                         sendResourcePack(player, file_url, file_sha1);
                     }
-                }.runTaskLater(this, 10);
+                }.runTaskLater(this, tickdelay);
             }
         } else {
             // 没启用，踢出
